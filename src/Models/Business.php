@@ -4,6 +4,7 @@ namespace Timegridio\Concierge\Models;
 
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 use McCool\LaravelAutoPresenter\HasPresenter;
 use Timegridio\Concierge\Addressbook;
 use Timegridio\Concierge\Presenters\BusinessPresenter;
@@ -11,17 +12,17 @@ use Timegridio\Concierge\Traits\IsIntoDomain;
 use Timegridio\Concierge\Traits\Preferenceable;
 
 /**
- * @property int $id
- * @property string $name
- * @property string $description
- * @property string $timezone
- * @property string $postal_address
- * @property string $phone
- * @property string $social_facebook
- * @property string $strategy
- * @property string $plan
- * @property string $country_code
- * @property string $locale
+ * @property int                           $id
+ * @property string                        $name
+ * @property string                        $description
+ * @property string                        $timezone
+ * @property string                        $postal_address
+ * @property string                        $phone
+ * @property string                        $social_facebook
+ * @property string                        $strategy
+ * @property string                        $plan
+ * @property string                        $country_code
+ * @property string                        $locale
  * @property Illuminate\Support\Collection $contacts
  * @property Illuminate\Support\Collection $services
  * @property Illuminate\Support\Collection $vacancies
@@ -29,11 +30,13 @@ use Timegridio\Concierge\Traits\Preferenceable;
  * @property Illuminate\Support\Collection $bookings
  * @property Illuminate\Support\Collection $servicetypes
  * @property Illuminate\Support\Collection $owners
- * @property int $SubscriptionsCount
+ * @property int                           $SubscriptionsCount
  */
 class Business extends EloquentModel implements HasPresenter
 {
-    use SoftDeletes, Preferenceable, IsIntoDomain;
+    use SoftDeletes;
+    use Preferenceable;
+    use IsIntoDomain;
 
     /**
      * The attributes that are mass assignable.
@@ -51,7 +54,7 @@ class Business extends EloquentModel implements HasPresenter
         'plan',
         'country_code',
         'locale',
-        ];
+    ];
 
     /**
      * The attributes that should be mutated to dates.
@@ -72,30 +75,14 @@ class Business extends EloquentModel implements HasPresenter
 
     /**
      * Define model events.
-     *
-     * @return void
      */
     public static function boot()
     {
         parent::boot();
 
         static::creating(function ($business) {
-
             $business->slug = $business->makeSlug($business->name);
-
         });
-    }
-
-    /**
-     * Make Slug.
-     *
-     * @param  string $name
-     *
-     * @return string
-     */
-    protected function makeSlug($name)
-    {
-        return str_slug($name);
     }
 
     ///////////////////
@@ -130,9 +117,10 @@ class Business extends EloquentModel implements HasPresenter
     public function contacts()
     {
         return $this->belongsToMany(Contact::class)
-                    ->with('user')
-                    ->withPivot('notes')
-                    ->withTimestamps();
+            ->with('user')
+            ->withPivot('notes')
+            ->withTimestamps()
+        ;
     }
 
     /**
@@ -213,9 +201,10 @@ class Business extends EloquentModel implements HasPresenter
     public function subscriptionsCount()
     {
         return $this->belongsToMany(Contact::class)
-                    ->selectRaw('id, count(*) as aggregate')
-                    ->whereNotNull('user_id')
-                    ->groupBy('business_id');
+            ->selectRaw('id, count(*) as aggregate')
+            ->whereNotNull('user_id')
+            ->groupBy('business_id')
+        ;
     }
 
     /**
@@ -239,8 +228,6 @@ class Business extends EloquentModel implements HasPresenter
     ///////////////
     // Overrides //
     ///////////////
-
-    //
 
     ///////////////
     // Presenter //
@@ -281,7 +268,7 @@ class Business extends EloquentModel implements HasPresenter
      */
     public function setSlugAttribute()
     {
-        return $this->attributes['slug'] = str_slug($this->name);
+        return $this->attributes['slug'] = Str::slug($this->name);
     }
 
     /**
@@ -319,9 +306,23 @@ class Business extends EloquentModel implements HasPresenter
 
     /**
      * Set Social Facebook.
+     *
+     * @param mixed $facebookPageUrl
      */
     public function setSocialFacebookAttribute($facebookPageUrl)
     {
         $this->attributes['social_facebook'] = trim($facebookPageUrl) ?: null;
+    }
+
+    /**
+     * Make Slug.
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    protected function makeSlug($name)
+    {
+        return Str::slug($name);
     }
 }

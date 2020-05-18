@@ -3,15 +3,16 @@
 namespace Timegridio\Concierge\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 /**
- * @property int $id
- * @property string $name
- * @property string $description
- * @property int $business_id
+ * @property int                                  $id
+ * @property string                               $name
+ * @property string                               $description
+ * @property int                                  $business_id
  * @property Timegridio\Concierge\Models\Business $business
- * @property Illuminate\Support\Collection $services
- * @property int $slug
+ * @property Illuminate\Support\Collection        $services
+ * @property int                                  $slug
  */
 class ServiceType extends Model
 {
@@ -54,13 +55,11 @@ class ServiceType extends Model
      *
      * Save the model to the database.
      *
-     * @param array $options
-     *
      * @return bool
      */
     public function save(array $options = [])
     {
-        $this->attributes['slug'] = str_slug($this->attributes['name']);
+        $this->attributes['slug'] = Str::slug($this->attributes['name']);
 
         return parent::save($options);
     }

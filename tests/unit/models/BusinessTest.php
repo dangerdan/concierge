@@ -4,19 +4,26 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Str;
 use Timegridio\Concierge\Models\Business;
 use Timegridio\Concierge\Presenters\BusinessPresenter;
 use Timegridio\Tests\Models\User;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class BusinessTest extends TestCaseDB
 {
     use DatabaseTransactions;
-    use CreateUser, CreateBusiness, CreateContact;
+    use CreateUser;
+    use CreateBusiness;
+    use CreateContact;
 
     /**
      * @test
      */
-    public function a_business_automatically_sets_a_slug_on_create()
+    public function aBusinessAutomaticallySetsASlugOnCreate()
     {
         $business = $this->createBusiness(['name' => 'My Awesome Biz']);
 
@@ -27,7 +34,7 @@ class BusinessTest extends TestCaseDB
      * @covers \Timegridio\Concierge\Models\Business::__construct
      * @test
      */
-    public function it_creates_a_business()
+    public function itCreatesABusiness()
     {
         $business = $this->createBusiness();
 
@@ -39,7 +46,7 @@ class BusinessTest extends TestCaseDB
      * @covers \Timegridio\Concierge\Models\Business::save
      * @test
      */
-    public function it_creates_a_business_that_appears_in_db()
+    public function itCreatesABusinessThatAppearsInDb()
     {
         $business = $this->createBusiness();
 
@@ -48,15 +55,15 @@ class BusinessTest extends TestCaseDB
 
     /**
      * @covers \Timegridio\Concierge\Models\Business::__construct
-     * @covers \Timegridio\Concierge\Models\Business::setSlugAttribute
      * @covers \Timegridio\Concierge\Models\Business::save
+     * @covers \Timegridio\Concierge\Models\Business::setSlugAttribute
      * @test@
      */
-    public function it_generates_slug_from_name()
+    public function itGeneratesSlugFromName()
     {
         $business = $this->createBusiness();
 
-        $slug = str_slug($business->name);
+        $slug = Str::slug($business->name);
 
         $this->assertEquals($slug, $business->slug);
     }
@@ -65,7 +72,7 @@ class BusinessTest extends TestCaseDB
      * @covers \Timegridio\Concierge\Models\Business::getPresenterClass
      * @test
      */
-    public function it_gets_business_presenter()
+    public function itGetsBusinessPresenter()
     {
         $business = $this->createBusiness();
 
@@ -78,7 +85,7 @@ class BusinessTest extends TestCaseDB
      * @covers \Timegridio\Concierge\Models\Business::setPhoneAttribute
      * @test
      */
-    public function it_sets_empty_phone_attribute()
+    public function itSetsEmptyPhoneAttribute()
     {
         $business = $this->createBusiness(['phone' => '']);
 
@@ -89,7 +96,7 @@ class BusinessTest extends TestCaseDB
      * @covers \Timegridio\Concierge\Models\Business::setPostalAddressAttribute
      * @test
      */
-    public function it_sets_empty_postal_address_attribute()
+    public function itSetsEmptyPostalAddressAttribute()
     {
         $business = $this->createBusiness(['postal_address' => '']);
 
@@ -100,7 +107,7 @@ class BusinessTest extends TestCaseDB
      * @covers \Timegridio\Concierge\Models\Business::owner
      * @test
      */
-    public function it_gets_the_business_owner()
+    public function itGetsTheBusinessOwner()
     {
         $owner = $this->createUser();
 
@@ -115,7 +122,7 @@ class BusinessTest extends TestCaseDB
      * @covers \Timegridio\Concierge\Models\Business::owners
      * @test
      */
-    public function it_gets_the_business_owners()
+    public function itGetsTheBusinessOwners()
     {
         $owner1 = $this->createUser();
         $owner2 = $this->createUser();
@@ -132,7 +139,7 @@ class BusinessTest extends TestCaseDB
     /**
      * @test
      */
-    public function it_has_humanresources()
+    public function itHasHumanresources()
     {
         $business = $this->createBusiness();
 
@@ -142,7 +149,7 @@ class BusinessTest extends TestCaseDB
     /**
      * @test
      */
-    public function it_has_bookings()
+    public function itHasBookings()
     {
         $business = $this->createBusiness();
 
@@ -152,7 +159,7 @@ class BusinessTest extends TestCaseDB
     /**
      * @test
      */
-    public function it_has_service_types()
+    public function itHasServiceTypes()
     {
         $business = $this->createBusiness();
 
@@ -162,7 +169,7 @@ class BusinessTest extends TestCaseDB
     /**
      * @test
      */
-    public function it_has_a_category()
+    public function itHasACategory()
     {
         $business = $this->createBusiness();
 

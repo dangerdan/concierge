@@ -3,18 +3,19 @@
 namespace Timegridio\Concierge\Models;
 
 use Illuminate\Database\Eloquent\Model as EloquentModel;
+use Illuminate\Support\Str;
 
 /**
- * @property int $id
- * @property int $business_id
+ * @property int                                  $id
+ * @property int                                  $business_id
  * @property Timegridio\Concierge\Models\Business $business
- * @property string $name
- * @property string $slug
- * @property string $description
- * @property string $prerequisites
- * @property int $duration
- * @property int $type_id
- * @property string $color
+ * @property string                               $name
+ * @property string                               $slug
+ * @property string                               $description
+ * @property string                               $prerequisites
+ * @property int                                  $duration
+ * @property int                                  $type_id
+ * @property string                               $color
  */
 class Service extends EloquentModel
 {
@@ -30,8 +31,8 @@ class Service extends EloquentModel
         'prerequisites',
         'duration',
         'type_id',
-        'color'
-        ];
+        'color',
+    ];
 
     /**
      * The attributes that aren't mass assignable.
@@ -79,13 +80,11 @@ class Service extends EloquentModel
      *
      * Save the model to the database.
      *
-     * @param array $options
-     *
      * @return bool
      */
     public function save(array $options = [])
     {
-        $this->attributes['slug'] = str_slug($this->attributes['name']);
+        $this->attributes['slug'] = Str::slug($this->attributes['name']);
 
         return parent::save($options);
     }

@@ -3,16 +3,16 @@
 namespace Timegridio\Concierge\Models;
 
 use Illuminate\Database\Eloquent\Model as EloquentModel;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 
 /**
- * @property int $id
- * @property string $name
- * @property int $business_id
+ * @property int                                  $id
+ * @property string                               $name
+ * @property int                                  $business_id
  * @property Timegridio\Concierge\Models\business $business
- * @property int $capacity
- * @property string $slug
- * @property string $calendar_link
+ * @property int                                  $capacity
+ * @property string                               $slug
+ * @property string                               $calendar_link
  */
 class Humanresource extends EloquentModel
 {
@@ -50,13 +50,11 @@ class Humanresource extends EloquentModel
      *
      * Save the model to the database.
      *
-     * @param array $options
-     *
      * @return bool
      */
     public function save(array $options = [])
     {
-        $this->attributes['slug'] = str_slug($this->attributes['name']);
+        $this->attributes['slug'] = Str::slug($this->attributes['name']);
 
         return parent::save($options);
     }

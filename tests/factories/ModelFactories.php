@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Str;
+
 //////////
 // User //
 //////////
@@ -7,8 +9,8 @@
 $factory(Timegridio\Tests\Models\User::class, function (Faker\Generator $faker) {
     return [
         'username' => $faker->firstName,
-        'name'     => $faker->firstName,
-        'email'    => $faker->safeEmail,
+        'name' => $faker->firstName,
+        'email' => $faker->safeEmail,
     ];
 });
 
@@ -18,15 +20,15 @@ $factory(Timegridio\Tests\Models\User::class, function (Faker\Generator $faker) 
 
 $factory(Timegridio\Concierge\Models\Contact::class, function (Faker\Generator $faker) {
     return [
-        'firstname'      => $faker->firstName,
-        'lastname'       => $faker->lastName,
-        'nin'            => $faker->numberBetween(25000000, 50000000),
-        'email'          => $faker->safeEmail,
-        'birthdate'      => Carbon\Carbon::now()->subYears(30),
-        'mobile'         => null,
+        'firstname' => $faker->firstName,
+        'lastname' => $faker->lastName,
+        'nin' => $faker->numberBetween(25000000, 50000000),
+        'email' => $faker->safeEmail,
+        'birthdate' => Carbon\Carbon::now()->subYears(30),
+        'mobile' => null,
         'mobile_country' => null,
-        'gender'         => $faker->randomElement(['M', 'F']),
-        'occupation'     => $faker->title,
+        'gender' => $faker->randomElement(['M', 'F']),
+        'occupation' => $faker->title,
         'martial_status' => null,
         'postal_address' => $faker->address,
     ];
@@ -38,10 +40,10 @@ $factory(Timegridio\Concierge\Models\Contact::class, function (Faker\Generator $
 
 $factory(Timegridio\Concierge\Models\Category::class, function (Faker\Generator $faker) {
     return [
-        'name'        => $faker->sentence(3),
-        'slug'        => str_slug($faker->name),
+        'name' => $faker->sentence(3),
+        'slug' => Str::slug($faker->name),
         'description' => $faker->paragraph,
-        'strategy'    => 'dateslot',
+        'strategy' => 'dateslot',
     ];
 });
 
@@ -50,15 +52,15 @@ $factory(Timegridio\Concierge\Models\Category::class, function (Faker\Generator 
 //////////////
 
 $factory(Timegridio\Concierge\Models\Business::class, [
-    'name'            => $faker->sentence(3),
-    'description'     => $faker->paragraph,
-    'timezone'        => $faker->timezone,
-    'postal_address'  => $faker->address,
-    'phone'           => null,
+    'name' => $faker->sentence(3),
+    'description' => $faker->paragraph,
+    'timezone' => $faker->timezone,
+    'postal_address' => $faker->address,
+    'phone' => null,
     'social_facebook' => 'https://www.facebook.com/example?fref=ts',
-    'strategy'        => 'dateslot',
-    'plan'            => 'free',
-    'category_id'     => 'factory:Timegridio\Concierge\Models\Category',
+    'strategy' => 'dateslot',
+    'plan' => 'free',
+    'category_id' => 'factory:Timegridio\Concierge\Models\Category',
 ]);
 
 //////////////////
@@ -68,7 +70,7 @@ $factory(Timegridio\Concierge\Models\Business::class, [
 $factory(Timegridio\Concierge\Models\ServiceType::class, function (Faker\Generator $faker) {
     return [
         'business_id' => 'factory:Timegridio\Concierge\Models\Business',
-        'name'        => $faker->sentence(3),
+        'name' => $faker->sentence(3),
         'description' => $faker->paragraph,
     ];
 });
@@ -79,11 +81,11 @@ $factory(Timegridio\Concierge\Models\ServiceType::class, function (Faker\Generat
 
 $factory(Timegridio\Concierge\Models\Service::class, function (Faker\Generator $faker) {
     return [
-        'business_id'   => 'factory:Timegridio\Concierge\Models\Business',
-        'name'          => $faker->sentence(2),
-        'description'   => $faker->paragraph,
+        'business_id' => 'factory:Timegridio\Concierge\Models\Business',
+        'name' => $faker->sentence(2),
+        'description' => $faker->paragraph,
         'prerequisites' => $faker->paragraph,
-        'duration'      => $faker->randomElement([15, 30, 60, 120]),
+        'duration' => $faker->randomElement([15, 30, 60, 120]),
     ];
 });
 
@@ -96,11 +98,11 @@ $factory(Timegridio\Concierge\Models\Vacancy::class, function (Faker\Generator $
 
     return [
         'business_id' => 'factory:Timegridio\Concierge\Models\Business',
-        'service_id'  => 'factory:Timegridio\Concierge\Models\Service',
-        'date'        => Carbon\Carbon::parse('today 00:00:00')->timezone('UTC')->toDateString(),
-        'start_at'    => Carbon\Carbon::parse('today 00:00:00')->timezone('UTC')->toDateTimeString(),
-        'finish_at'   => Carbon\Carbon::parse('today 18:00:00')->timezone('UTC')->toDateTimeString(),
-        'capacity'    => 1,
+        'service_id' => 'factory:Timegridio\Concierge\Models\Service',
+        'date' => Carbon\Carbon::parse('today 00:00:00')->timezone('UTC')->toDateString(),
+        'start_at' => Carbon\Carbon::parse('today 00:00:00')->timezone('UTC')->toDateTimeString(),
+        'finish_at' => Carbon\Carbon::parse('today 18:00:00')->timezone('UTC')->toDateTimeString(),
+        'capacity' => 1,
     ];
 });
 
@@ -111,13 +113,13 @@ $factory(Timegridio\Concierge\Models\Vacancy::class, function (Faker\Generator $
 $factory(Timegridio\Concierge\Models\Appointment::class, function (Faker\Generator $faker) {
     return [
         'business_id' => 'factory:Timegridio\Concierge\Models\Business',
-        'contact_id'  => 'factory:Timegridio\Concierge\Models\Contact',
-        'service_id'  => 'factory:Timegridio\Concierge\Models\Service',
-        'vacancy_id'  => 'factory:Timegridio\Concierge\Models\Vacancy',
-        'status'      => $faker->randomElement(['R', 'C', 'A', 'S']),
-        'start_at'    => Carbon\Carbon::parse(date('Y-m-d 08:00:00', strtotime('today +2 days'))),
-        'duration'    => $faker->randomElement([15, 30, 60, 120]),
-        'comments'    => $faker->sentence,
+        'contact_id' => 'factory:Timegridio\Concierge\Models\Contact',
+        'service_id' => 'factory:Timegridio\Concierge\Models\Service',
+        'vacancy_id' => 'factory:Timegridio\Concierge\Models\Vacancy',
+        'status' => $faker->randomElement(['R', 'C', 'A', 'S']),
+        'start_at' => Carbon\Carbon::parse(date('Y-m-d 08:00:00', strtotime('today +2 days'))),
+        'duration' => $faker->randomElement([15, 30, 60, 120]),
+        'comments' => $faker->sentence,
     ];
 });
 
@@ -127,7 +129,7 @@ $factory(Timegridio\Concierge\Models\Appointment::class, function (Faker\Generat
 
 $factory(Timegridio\Concierge\Models\Domain::class, function ($faker) {
     return [
-        'slug'     => str_slug($faker->name),
+        'slug' => Str::slug($faker->name),
         'owner_id' => 'factory:Timegridio\Tests\Models\User',
     ];
 });
@@ -138,7 +140,7 @@ $factory(Timegridio\Concierge\Models\Domain::class, function ($faker) {
 
 $factory(Timegridio\Concierge\Models\Humanresource::class, function ($faker) {
     return [
-        'name'        => $faker->name,
+        'name' => $faker->name,
         'business_id' => 'factory:Timegridio\Concierge\Models\Business',
     ];
 });
