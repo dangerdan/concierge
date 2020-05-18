@@ -1,7 +1,7 @@
 {
-    "name": "timegridio/concierge",
+    "name": "dangerdan/concierge",
     "type": "library",
-    "description": "A Laravel 6.x reservation library",
+    "description": "A Laravel 7.x reservation library",
     "keywords": [
         "laravel",
         "timegrid",
